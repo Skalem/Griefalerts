@@ -1,0 +1,7 @@
+#Write down all the information (field Database doesn't need value)
+Database:
+    password:
+    user:
+    host:
+    port:
+    name:

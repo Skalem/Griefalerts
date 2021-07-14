@@ -1,0 +1,19 @@
+name: Griefalerts
+version: ${project.version}
+main: by.skalem.griefalerts.griefalerts.Griefalerts
+api-version: 1.16
+authors: [ Skalem ]
+description: Helps admins to cope with griefers
+
+permissions:
+  Griefalerts.*:
+    children:
+      Griefalerts.stopspam: false
+      Griefalerts.command: false
+
+commands:
+  gf:
+    description: overall command for commands of griefalerts plugin
+    usage: /gf <stop,friend>
+    permission: Griefalerts.command
+    aliases: [stop, friend]
