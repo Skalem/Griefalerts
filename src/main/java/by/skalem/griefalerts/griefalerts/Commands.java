@@ -3,12 +3,11 @@ package by.skalem.griefalerts.griefalerts;
 
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class Commands implements CommandExecutor, Runnable {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
 
         if(strings.length == 0){
             return false;
@@ -92,97 +91,131 @@ public class Commands implements CommandExecutor, Runnable {
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
-            JsonArray friends = new JsonArray();
-            friends.add("Null");
+
             if (!file1.exists()){
+                System.out.println("Creating new file");
+                JsonWriter jw;
                 try {
-                    plugin.getLogger().info("Crating new JSON");
-                    file1.createNewFile();
-                    plugin.getLogger().info("Created");
+                    jw = new JsonWriter(new FileWriter(file1));
                 } catch (IOException e) {
                     e.printStackTrace();
                     return false;
                 }
                 try {
-                    FileWriter w = new FileWriter(file1);
-                    gson.toJson(friends, w);
-                    w.flush();
-                    w.close();
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
+                    jw.jsonValue(player2);
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Editing already created file");
+                try {
+                    gson.fromJson(new FileReader(file1), Friends.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ArrayList<String> friends;
+                friends = new Friends().List();
+                if(!friends.contains(player2)){
+                    friends.add(player2);
+                } else {
+                    System.out.println("This user already registered as a friend");
+                    return true;
+                }
+                JsonWriter jw;
+                try {
+                    jw = new JsonWriter(new FileWriter(file1));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                try {
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
+
+                    for (String friend : friends) {
+                        jw.jsonValue(friend);
+                    }
+
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
             if (!file2.exists()){
+                plugin.getLogger().info("Creating new file");
+                JsonWriter jw;
                 try {
-                    file2.createNewFile();
+                    jw = new JsonWriter(new FileWriter(file2));
                 } catch (IOException e) {
                     e.printStackTrace();
                     return false;
                 }
                 try {
-                    FileWriter w = new FileWriter(file2);
-                    gson.toJson(friends , w);
-                    w.flush();
-                    w.close();
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
+                    jw.jsonValue(player1);
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-
-            try {
-                FileReader reader = new FileReader(plugin.getDataFolder() + File.separator + player1 + ".json");
-                Friends f = gson.fromJson(reader, Friends.class);
-                ArrayList<String> friendsString = f.List();
-                if (!friendsString.contains(player2)) friends.add(player2);
-
-                new Friends(friendsString);
-
+            } else {
+                plugin.getLogger().info("Editing already created file");
                 try {
-                    FileWriter writer = new FileWriter(plugin.getDataFolder() + File.separator + player1 + ".json");
-                    gson.toJson(friendsString,writer);
-
+                    gson.fromJson(new FileReader(file2), Friends.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ArrayList<String> friends;
+                friends = new Friends().List();
+                if(!friends.contains(player1)){
+                    friends.add(player1);
+                } else {
+                    commandSender.sendMessage("This user already registered as a friend");
+                    return true;
+                }
+                JsonWriter jw;
+                try {
+                    jw = new JsonWriter(new FileWriter(file2));
                 } catch (IOException e) {
-                    commandSender.sendMessage("Couldn't save file for path " + plugin.getDataFolder() + File.separator + player1 + ".json");
                     e.printStackTrace();
                     return false;
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                commandSender.sendMessage("Couldn't find file for path " + plugin.getDataFolder() + File.separator + player1 + ".json");
-                return false;
-            }
-
-
-
-            try {
-                FileReader reader = new FileReader(plugin.getDataFolder() + File.separator + player2 + ".json");
-                Friends f = gson.fromJson(reader, Friends.class);
-                ArrayList<String> friendsString = f.List();
-                if(!friendsString.contains(player1)) friends.add(player1);
-                new Friends(friendsString);
-
                 try {
-                    FileWriter writer = new FileWriter(plugin.getDataFolder() + File.separator + player2 + ".json");
-                    gson.toJson(friendsString,writer);
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
 
+                    for (String friend : friends) {
+                        jw.jsonValue(friend);
+                    }
+
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
                 } catch (IOException e) {
-                    commandSender.sendMessage("Couldn't save file for path " + plugin.getDataFolder() + File.separator + player2 + ".json");
                     e.printStackTrace();
-                    return false;
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                commandSender.sendMessage("Couldn't find file for path " + plugin.getDataFolder() + File.separator + player2 + ".json");
-                return false;
             }
 
             return true;
 
-
         } else if (strings[0].equals("friends") && strings[1].equals("remove")){
 
-            if(strings.length < 4) return false;
+
+            if(strings.length != 4) return false;
+
             String player1 = strings[2];
             String player2 = strings[3];
 
@@ -190,58 +223,81 @@ public class Commands implements CommandExecutor, Runnable {
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
-            if (!file1.exists()){
-                commandSender.sendMessage("Cannot find user" + player1);
-            }
-
-            if (!file2.exists()){
-                commandSender.sendMessage("Cannot find user" + player2);
-            }
-
-
-            try {
-                FileReader reader = new FileReader(plugin.getDataFolder() + File.separator + player1 + ".json");
-                Friends f = gson.fromJson(reader, Friends.class);
-                ArrayList<String> friends = f.List();
-                if(!friends.remove(player2)) commandSender.sendMessage("Couldn't find player " + player2 + "amongst friends of player" + player1);
-                new Friends(friends);
-
+            if(file1.exists()){
+                plugin.getLogger().info("Editing already created file");
                 try {
-                    FileWriter writer = new FileWriter(plugin.getDataFolder() + File.separator + player1 + ".json");
-                    gson.toJson(friends,writer);
-
+                    gson.fromJson(new FileReader(file1), Friends.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ArrayList<String> friends;
+                friends = new Friends().List();
+                if(friends.contains(player2)){
+                    friends.remove(player2);
+                } else {
+                    commandSender.sendMessage("This players are not friends");
+                    return true;
+                }
+                JsonWriter jw;
+                try {
+                    jw = new JsonWriter(new FileWriter(file1));
                 } catch (IOException e) {
-                    commandSender.sendMessage("Couldn't save file for path " + plugin.getDataFolder() + File.separator + player1 + ".json");
                     e.printStackTrace();
                     return false;
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                commandSender.sendMessage("Couldn't find file for path " + plugin.getDataFolder() + File.separator + player1 + ".json");
-                return false;
-            }
-
-
-            try {
-                FileReader reader = new FileReader(plugin.getDataFolder() + File.separator + player2 + ".json");
-                Friends f = gson.fromJson(reader, Friends.class);
-                ArrayList<String> friends = f.List();
-                if(!friends.remove(player2)) commandSender.sendMessage("Couldn't find player " + player1 + "amongst friends of player" + player2);
-                new Friends(friends);
-
                 try {
-                    FileWriter writer = new FileWriter(plugin.getDataFolder() + File.separator + player2 + ".json");
-                    gson.toJson(friends,writer);
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
 
+                    for (String friend : friends) {
+                        jw.jsonValue(friend);
+                    }
+
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
                 } catch (IOException e) {
-                    commandSender.sendMessage("Couldn't save file for path " + plugin.getDataFolder() + File.separator + player2 + ".json");
+                    e.printStackTrace();
+                }
+            }
+            if(file2.exists()){
+                plugin.getLogger().info("Editing already created file");
+                try {
+                    gson.fromJson(new FileReader(file2), Friends.class);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ArrayList<String> friends;
+                friends = new Friends().List();
+                if(friends.contains(player1)){
+                    friends.remove(player1);
+                } else {
+                    commandSender.sendMessage("This players are not friends");
+                    return true;
+                }
+                JsonWriter jw;
+                try {
+                    jw = new JsonWriter(new FileWriter(file2));
+                } catch (IOException e) {
                     e.printStackTrace();
                     return false;
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                commandSender.sendMessage("Couldn't find file for path " + plugin.getDataFolder() + File.separator + player2 + ".json");
-                return false;
+                try {
+                    jw.beginObject();
+                    jw.name("friends");
+                    jw.beginArray();
+
+                    for (String friend : friends) {
+                        jw.jsonValue(friend);
+                    }
+
+                    jw.endArray();
+                    jw.endObject();
+                    jw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             return true;

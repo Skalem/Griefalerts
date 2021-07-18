@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class Friends {
 
-    ArrayList<String> friends = new ArrayList<String>();
+    ArrayList<String> friends;
 
-    public Friends(ArrayList<String> friends){
+    public void friends(ArrayList<String> friends){
         this.friends = friends;
     }
 
