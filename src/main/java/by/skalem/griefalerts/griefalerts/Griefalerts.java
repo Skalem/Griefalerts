@@ -28,12 +28,6 @@ public final class Griefalerts extends JavaPlugin {
             getLogger().warning("Couldn't load command /gf");
         }
 
-        List<String> aliases = new ArrayList<>();
-        aliases.add("friend");
-        aliases.add("stop");
-        if(getCommand("gf") != null) {
-            getCommand("gf").setAliases(aliases);
-        }
         getLogger().info("Enabled");
 
     }

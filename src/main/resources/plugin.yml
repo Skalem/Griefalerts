@@ -7,13 +7,11 @@ description: Helps admins to cope with griefers
 
 permissions:
   Griefalerts.*:
-    children:
-      Griefalerts.stopspam: false
-      Griefalerts.command: false
+    description: allows to us /gf command
+    default: op
 
 commands:
   gf:
     description: overall command for commands of griefalerts plugin
-    usage: /gf <stop,friend>
+    usage: /gf <stop,friend> <time,player1> <nothing,player2>
     permission: Griefalerts.command
-    aliases: [stop, friend]
