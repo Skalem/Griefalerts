@@ -40,42 +40,52 @@ public class Commands implements CommandExecutor, Runnable {
                 case "1":
                     this.time = 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 1 + "minute");
                     return true;
                 case "2":
                     this.time = 2 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 2 + "minutes");
                     return true;
                 case "3":
                     this.time = 3 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 3 + "minutes");
                     return true;
                 case "4":
                     this.time = 4 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 4 + "minutes");
                     return true;
                 case "5":
                     this.time = 5 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 5 + "minutes");
                     return true;
                 case "6":
                     this.time = 6 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 6 + "minutes");
                     return true;
                 case "7":
                     this.time = 7 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 7 + "minutes");
                     return true;
                 case "8":
                     this.time = 8 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 8 + "minutes");
                     return true;
                 case "9":
                     this.time = 9 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 9 + "minutes");
                     return true;
                 case "10":
                     this.time = 10 * 60 * 1000;
                     thread.start();
+                    commandSender.sendMessage("Stopped griefalerts for" + 10 + "minutes");
                     return true;
             }
         }
@@ -93,7 +103,6 @@ public class Commands implements CommandExecutor, Runnable {
 
 
             if (!file1.exists()){
-                System.out.println("Creating new file");
                 JsonWriter jw;
                 try {
                     jw = new JsonWriter(new FileWriter(file1));
@@ -105,7 +114,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginObject();
                     jw.name("friends");
                     jw.beginArray();
-                    jw.jsonValue(player2);
+                    jw.value(player2);
                     jw.endArray();
                     jw.endObject();
                     jw.close();
@@ -113,18 +122,21 @@ public class Commands implements CommandExecutor, Runnable {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println("Editing already created file");
+                ArrayList<String> friends;
+                Friends friends1;
+
                 try {
-                    gson.fromJson(new FileReader(file1), Friends.class);
+                    friends1 = gson.fromJson(new FileReader(file1), Friends.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    return true;
                 }
-                ArrayList<String> friends;
-                friends = new Friends().List();
+
+                friends = friends1.List();
                 if(!friends.contains(player2)){
                     friends.add(player2);
                 } else {
-                    System.out.println("This user already registered as a friend");
+                    commandSender.sendMessage("This user already registered as a friend");
                     return true;
                 }
                 JsonWriter jw;
@@ -140,7 +152,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginArray();
 
                     for (String friend : friends) {
-                        jw.jsonValue(friend);
+                        jw.value(friend);
                     }
 
                     jw.endArray();
@@ -151,7 +163,6 @@ public class Commands implements CommandExecutor, Runnable {
                 }
             }
             if (!file2.exists()){
-                plugin.getLogger().info("Creating new file");
                 JsonWriter jw;
                 try {
                     jw = new JsonWriter(new FileWriter(file2));
@@ -163,7 +174,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginObject();
                     jw.name("friends");
                     jw.beginArray();
-                    jw.jsonValue(player1);
+                    jw.value(player1);
                     jw.endArray();
                     jw.endObject();
                     jw.close();
@@ -171,14 +182,16 @@ public class Commands implements CommandExecutor, Runnable {
                     e.printStackTrace();
                 }
             } else {
-                plugin.getLogger().info("Editing already created file");
+                ArrayList<String> friends;
+                Friends friends2;
+
                 try {
-                    gson.fromJson(new FileReader(file2), Friends.class);
+                    friends2 = gson.fromJson(new FileReader(file2), Friends.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    return true;
                 }
-                ArrayList<String> friends;
-                friends = new Friends().List();
+                friends = friends2.List();
                 if(!friends.contains(player1)){
                     friends.add(player1);
                 } else {
@@ -198,7 +211,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginArray();
 
                     for (String friend : friends) {
-                        jw.jsonValue(friend);
+                        jw.value(friend);
                     }
 
                     jw.endArray();
@@ -208,10 +221,10 @@ public class Commands implements CommandExecutor, Runnable {
                     e.printStackTrace();
                 }
             }
-
+            commandSender.sendMessage("Successfully added players in friends");
             return true;
 
-        } else if (strings[0].equals("friends") && strings[1].equals("remove")){
+        } else if (strings[0].equals("friend") && strings[1].equals("remove")){
 
 
             if(strings.length != 4) return false;
@@ -224,14 +237,15 @@ public class Commands implements CommandExecutor, Runnable {
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
             if(file1.exists()){
-                plugin.getLogger().info("Editing already created file");
+                ArrayList<String> friends;
+                Friends friends1;
                 try {
-                    gson.fromJson(new FileReader(file1), Friends.class);
+                    friends1 = gson.fromJson(new FileReader(file1), Friends.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    return true;
                 }
-                ArrayList<String> friends;
-                friends = new Friends().List();
+                friends = friends1.List();
                 if(friends.contains(player2)){
                     friends.remove(player2);
                 } else {
@@ -251,7 +265,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginArray();
 
                     for (String friend : friends) {
-                        jw.jsonValue(friend);
+                        jw.value(friend);
                     }
 
                     jw.endArray();
@@ -262,14 +276,15 @@ public class Commands implements CommandExecutor, Runnable {
                 }
             }
             if(file2.exists()){
-                plugin.getLogger().info("Editing already created file");
+                ArrayList<String> friends;
+                Friends friends1;
                 try {
-                    gson.fromJson(new FileReader(file2), Friends.class);
+                    friends1 = gson.fromJson(new FileReader(file2), Friends.class);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    return true;
                 }
-                ArrayList<String> friends;
-                friends = new Friends().List();
+                friends = friends1.List();
                 if(friends.contains(player1)){
                     friends.remove(player1);
                 } else {
@@ -289,7 +304,7 @@ public class Commands implements CommandExecutor, Runnable {
                     jw.beginArray();
 
                     for (String friend : friends) {
-                        jw.jsonValue(friend);
+                        jw.value(friend);
                     }
 
                     jw.endArray();
@@ -299,7 +314,7 @@ public class Commands implements CommandExecutor, Runnable {
                     e.printStackTrace();
                 }
             }
-
+            commandSender.sendMessage("Successfully removed players from friends");
             return true;
         }
         return false;
