@@ -6,7 +6,7 @@
 
     <groupId>by.skalem.griefalerts</groupId>
     <artifactId>Griefalerts</artifactId>
-    <version>4.0.18-alpha</version>
+    <version>4.0.23-alpha</version>
     <packaging>jar</packaging>
 
     <name>Griefalerts</name>
