@@ -102,7 +102,7 @@ public class Threads implements Runnable {
                         Player pl  = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -123,7 +123,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -148,7 +148,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -173,7 +173,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -198,7 +198,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++){
+                                for (int i = 0; i < this.players.length; i++){
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -224,7 +224,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -250,7 +250,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -275,7 +275,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
@@ -300,7 +300,7 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i <= this.players.length; i++) {
+                                for (int i = 0; i < this.players.length; i++) {
                                     if(this.players[i] != null) {
                                         if (this.players[i].equals(pl.getDisplayName())) {
                                             return;
