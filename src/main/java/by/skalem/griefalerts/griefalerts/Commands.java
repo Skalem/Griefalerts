@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -23,6 +24,8 @@ public class Commands implements CommandExecutor, Runnable {
     public Commands(Griefalerts plugin){
         this.plugin = plugin;
     }
+    private Threads threads;
+
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
@@ -35,57 +38,58 @@ public class Commands implements CommandExecutor, Runnable {
             if(strings.length != 2) return false;
             this.name = commandSender.getName();
             String time = strings[1];
+            threads = new Threads(plugin);
             Thread thread = new Thread(this);
             switch (time) {
                 case "1":
                     this.time = 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 1 + "minute");
+                    commandSender.sendMessage("Stopped griefalerts for" + 1 + " minute");
                     return true;
                 case "2":
                     this.time = 2 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 2 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 2 + " minutes");
                     return true;
                 case "3":
                     this.time = 3 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 3 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 3 + " minutes");
                     return true;
                 case "4":
                     this.time = 4 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 4 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 4 + " minutes");
                     return true;
                 case "5":
                     this.time = 5 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 5 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 5 + " minutes");
                     return true;
                 case "6":
                     this.time = 6 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 6 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 6 + " minutes");
                     return true;
                 case "7":
                     this.time = 7 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 7 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 7 + " minutes");
                     return true;
                 case "8":
                     this.time = 8 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 8 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 8 + " minutes");
                     return true;
                 case "9":
                     this.time = 9 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 9 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 9 + " minutes");
                     return true;
                 case "10":
                     this.time = 10 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 10 + "minutes");
+                    commandSender.sendMessage("Stopped griefalerts for" + 10 + " minutes");
                     return true;
             }
         }
@@ -322,14 +326,15 @@ public class Commands implements CommandExecutor, Runnable {
 
     @Override
     public void run() {
-
-        Threads threads = new Threads(plugin);
-        threads.mute(this.name);
+        plugin.getLogger().info("Starting new thread");
+        plugin.getLogger().info("Muting with nickname" + this.name);
+        this.threads.mute(this.name);
         try {
             sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        threads.unmute(this.name);
+        plugin.getLogger().info("Unmuting player" + this.name);
+        this.threads.unmute(this.name);
     }
 }

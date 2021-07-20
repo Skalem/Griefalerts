@@ -2,14 +2,13 @@ package by.skalem.griefalerts.griefalerts;
 
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,7 +29,6 @@ public class Threads implements Runnable {
     String block;
     int code;
     String dim;
-    String[] players = new String[20];
 
     public void ThreadCreator(String player, int x, int y, int z,String block, int code, String dim){
 
@@ -94,6 +92,22 @@ public class Threads implements Runnable {
             e.printStackTrace();
         }
 
+        ArrayList<String> muted = new ArrayList<>();
+        File file = new File(plugin.getDataFolder() + File.separator + "md.json");
+        if(file.exists()) {
+            Gson gson = new Gson();
+            Muted m = null;
+            try {
+                m = gson.fromJson(new FileReader(file), Muted.class);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (m != null) {
+                muted = m.List();
+            }
+        }
+
+
         switch (code){
             case 0:
                 TextComponent msg = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " сломал блок " + ChatColor.RED + block + ChatColor.GRAY + " игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
@@ -103,15 +117,15 @@ public class Threads implements Runnable {
                     while (it.hasNext()){
                         Player pl  = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
                                         if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
                                 }
-                                pl.spigot().sendMessage(msg);
+                                pl.sendMessage(msg);
                             } else {
                                 pl.spigot().sendMessage(msg);
                             }
@@ -124,10 +138,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -149,10 +163,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -174,10 +188,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -199,10 +213,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -225,8 +239,8 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     plugin.getLogger().info(s);
                                     if (s != null) {
                                         plugin.getLogger().info("Checking if " + s + " equals " + pl.getName());
@@ -254,10 +268,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -279,10 +293,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -304,10 +318,10 @@ public class Threads implements Runnable {
                     while (it.hasNext()) {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
-                            if(this.players != null) {
-                                for (String s : this.players) {
+                            if(muted != null) {
+                                for (String s : muted) {
                                     if (s != null) {
-                                        if (s.equals(pl.getDisplayName())) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -329,28 +343,79 @@ public class Threads implements Runnable {
 
     public void mute(String player){
         plugin.getLogger().info("Starting to mute");
-        for (int i = 0; i < players.length; i++){
-            plugin.getLogger().info("Checking if " + players[i] + "is null");
-            if(players[i] == null) {
-                plugin.getLogger().info("Saving");
-                players[i] = player;
-                plugin.getLogger().info("Saved");
-                break;
+
+        ArrayList<String> muted;
+        File file = new File(plugin.getDataFolder() + File.separator + "md.json");
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            try {
+                JsonWriter jw = new JsonWriter(new FileWriter(file));
+                jw.beginObject();
+                jw.name("muted");
+                jw.beginArray();
+                jw.value(player);
+                jw.endArray();
+                jw.endObject();
+                jw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Gson gson = new Gson();
+                Muted m = gson.fromJson(new FileReader(file),Muted.class);
+                muted = m.List();
+                muted.add(player);
+
+                JsonWriter jw = new JsonWriter(new FileWriter(file));
+                jw.beginObject();
+                jw.name("muted");
+                jw.beginArray();
+                for (String s : muted){
+                    jw.value(s);
+                }
+                jw.endArray();
+                jw.endObject();
+                jw.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
     public void unmute(String player){
         plugin.getLogger().info("Starting to unmute");
-        for (int i = 0; i <= players.length; i++){
-            plugin.getLogger().info("Checking if " + players[i] + "is equal to " + player);
-            if (players[i] != null) {
-                if (players[i].equals(player)) {
-                    players[i] = null;
-                    plugin.getLogger().info("Unmuted");
-                    break;
-                }
+
+        File file = new File(plugin.getDataFolder() + File.separator + "md.json");
+        ArrayList<String> muted;
+
+        if(!file.exists()) return;
+
+        try {
+            Gson gson = new Gson();
+            Muted m = gson.fromJson(new FileReader(file),Muted.class);
+            muted = m.List();
+            muted.remove(player);
+
+            JsonWriter jw = new JsonWriter(new FileWriter(file));
+            jw.beginObject();
+            jw.name("muted");
+            jw.beginArray();
+            for (String s : muted){
+                jw.value(s);
             }
+            jw.endArray();
+            jw.endObject();
+            jw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
