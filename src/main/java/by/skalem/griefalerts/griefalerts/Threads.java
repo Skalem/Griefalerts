@@ -85,9 +85,11 @@ public class Threads implements Runnable {
         Gson g = new Gson();
         try {
             FileReader r = new FileReader(plugin.getDataFolder() + File.separator + player2 + ".json");
-            Friends f = g.fromJson(r, Friends.class);
-            ArrayList<String> friends = f.List();
-            if(friends.contains(player)) return;
+            if (new File(plugin.getDataFolder() + File.separator + player2 + ".json").exists()) {
+                Friends f = g.fromJson(r, Friends.class);
+                ArrayList<String> friends = f.List();
+                if (friends.contains(player)) return;
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -102,9 +104,9 @@ public class Threads implements Runnable {
                         Player pl  = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -123,9 +125,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -148,9 +150,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -173,9 +175,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -198,9 +200,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++){
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -224,9 +226,11 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    plugin.getLogger().info(s);
+                                    if (s != null) {
+                                        plugin.getLogger().info("Checking if " + s + " equals " + pl.getName());
+                                        if (s.equalsIgnoreCase(pl.getName())) {
                                             return;
                                         }
                                     }
@@ -235,6 +239,7 @@ public class Threads implements Runnable {
                                 msgdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
                                 pl.spigot().sendMessage(msgdoor);
                             } else {
+                                plugin.getLogger().info("Sending message because array is null");
                                 msgdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл дверь игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
                                 msgdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
                                 pl.spigot().sendMessage(msgdoor);
@@ -250,9 +255,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -275,9 +280,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -300,9 +305,9 @@ public class Threads implements Runnable {
                         Player pl = it.next();
                         if (pl.hasPermission("Griefalerts.spam")) {
                             if(this.players != null) {
-                                for (int i = 0; i < this.players.length; i++) {
-                                    if(this.players[i] != null) {
-                                        if (this.players[i].equals(pl.getDisplayName())) {
+                                for (String s : this.players) {
+                                    if (s != null) {
+                                        if (s.equals(pl.getDisplayName())) {
                                             return;
                                         }
                                     }
@@ -323,19 +328,28 @@ public class Threads implements Runnable {
     }
 
     public void mute(String player){
-        for (int i = 0; i <= players.length; i++){
+        plugin.getLogger().info("Starting to mute");
+        for (int i = 0; i < players.length; i++){
+            plugin.getLogger().info("Checking if " + players[i] + "is null");
             if(players[i] == null) {
+                plugin.getLogger().info("Saving");
                 players[i] = player;
+                plugin.getLogger().info("Saved");
                 break;
             }
         }
     }
 
     public void unmute(String player){
+        plugin.getLogger().info("Starting to unmute");
         for (int i = 0; i <= players.length; i++){
-            if(players[i].equals(player)){
-                players[i] = null;
-                break;
+            plugin.getLogger().info("Checking if " + players[i] + "is equal to " + player);
+            if (players[i] != null) {
+                if (players[i].equals(player)) {
+                    players[i] = null;
+                    plugin.getLogger().info("Unmuted");
+                    break;
+                }
             }
         }
     }
