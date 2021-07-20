@@ -40,7 +40,7 @@ public final class Griefalerts extends JavaPlugin {
 
         JsonWriter jw;
         try {
-            jw = new JsonWriter(new FileWriter(getDataFolder() + File.separator + "mt.json"));
+            jw = new JsonWriter(new FileWriter(getDataFolder() + File.separator + "md.json"));
             jw.beginObject();
             jw.name("muted");
             jw.beginArray();
