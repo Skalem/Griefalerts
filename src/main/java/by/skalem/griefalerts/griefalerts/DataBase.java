@@ -3,7 +3,7 @@ package by.skalem.griefalerts.griefalerts;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
-public class DataBase{
+public class DataBase {
     private static Griefalerts plugin;
     private static String block_url;
     private static String block_user;
@@ -26,8 +26,8 @@ public class DataBase{
             block_port = plugin.getConfig().getString("Database.port");
         }
 
-        if(block_host == null || block_password == null || block_user == null || block_name == null || block_port == null) {
-            plugin.getLogger().warning("(Database)[Connection error]     Password: " + block_password + " User: " + block_user + " Host: " + block_host + " Name: "+ block_name + " Port: " + block_port + ". Check plugins/Griefalerts/config.yml");
+        if (block_host == null || block_password == null || block_user == null || block_name == null || block_port == null) {
+            plugin.getLogger().warning("(Database)[Connection error]     Password: " + block_password + " User: " + block_user + " Host: " + block_host + " Name: " + block_name + " Port: " + block_port + ". Check plugins/Griefalerts/config.yml");
             return "#";
         }
 
@@ -39,7 +39,7 @@ public class DataBase{
         String player = "#";
         int dimcode = 0;
 
-        switch (dim){
+        switch (dim) {
             case "world":
                 dimcode = 1;
                 break;
@@ -64,8 +64,8 @@ public class DataBase{
         try {
             con = DriverManager.getConnection(block_url, block_user, block_password);
             stmt = con.createStatement();
-            rs = stmt.executeQuery("SELECT `co_user`.`user` FROM `co_user` WHERE co_user.rowid = (SELECT `co_block`.`user` FROM `co_block` WHERE `co_block`.`action` = 1 AND `co_block`.`rolled_back` = 0 AND `co_block`.`x` = " + x + " AND `co_block`.`y` = " + y + " AND `co_block`.`z` = " + z +" AND `co_block`.`wid` = " + dimcode + " ORDER BY `co_block`.`time`  DESC LIMIT 1)") ;
-            if(rs.next()){
+            rs = stmt.executeQuery("SELECT `co_user`.`user` FROM `co_user` WHERE co_user.rowid = (SELECT `co_block`.`user` FROM `co_block` WHERE `co_block`.`action` = 1 AND `co_block`.`rolled_back` = 0 AND `co_block`.`x` = " + x + " AND `co_block`.`y` = " + y + " AND `co_block`.`z` = " + z + " AND `co_block`.`wid` = " + dimcode + " ORDER BY `co_block`.`time`  DESC LIMIT 1)");
+            if (rs.next()) {
                 player = rs.getString(1);
             }
         } catch (SQLException throwables) {
