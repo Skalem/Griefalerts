@@ -2,8 +2,8 @@ package by.skalem.griefalerts.griefalerts;
 
 
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
@@ -15,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -92,8 +91,8 @@ public class Actions implements Listener {
 
         Player p = e.getPlayer();
 
-        TextComponent msg = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + p.getDisplayName() + ChatColor.GRAY +" Поставил табличку с текстом: " + ChatColor.WHITE + Arrays.toString(e.getLines()) + ChatColor.GRAY + " на " + ChatColor.UNDERLINE + e.getBlock().getX() + " " + e.getBlock().getY() + " " + e.getBlock().getZ());
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + e.getBlock().getX() + " " + e.getBlock().getY() + " " + e.getBlock().getZ()));
+        Component msg = Component.newline().content(ChatColor.GRAY + "Игрок " + ChatColor.RED + p.getDisplayName() + ChatColor.GRAY + " Поставил табличку с текстом: " + ChatColor.WHITE + e.lines() + ChatColor.GRAY + " на " + ChatColor.UNDERLINE + e.getBlock().getX() + " " + e.getBlock().getY() + " " + e.getBlock().getZ());
+        msg.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + e.getBlock().getX() + " " + e.getBlock().getY() + " " + e.getBlock().getZ()));
 
         Collection<? extends Player> players = getServer().getOnlinePlayers();
         Iterator<? extends Player> it = players.iterator();
@@ -101,7 +100,7 @@ public class Actions implements Listener {
             while (it.hasNext()) {
                 Player pl = it.next();
                 if (pl.hasPermission("Griefalerts.spam")) {
-                    pl.spigot().sendMessage(msg);
+                    pl.sendMessage(msg);
                 }
             }
         }
