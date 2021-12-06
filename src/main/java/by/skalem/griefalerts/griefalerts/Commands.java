@@ -101,130 +101,40 @@ public class Commands implements CommandExecutor, Runnable {
             String player1 = strings[2];
             String player2 = strings[3];
 
-            Gson gson = new Gson();
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
+            JsonWorker jsonWorker1 = new JsonWorker(file1);
+            JsonWorker jsonWorker2 = new JsonWorker(file2);
 
-            if (!file1.exists()){
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file1));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
-                    jw.value(player2);
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                ArrayList<String> friends;
-                Friends friends1;
+            try {
+                ArrayList<String> friends = new ArrayList<>();
+                friends = jsonWorker1.readJSON();
+                 if (!friends.contains(player1)) {
+                     friends.add(player1);
+                 } else {
+                     commandSender.sendMessage(player1 + " already has friend " + player2);
+                     return true;
+                 }
+                jsonWorker1.writeJSON(friends, "friends");
+            } catch (IOException e){
+                e.printStackTrace();
+            }
 
-                try {
-                    friends1 = gson.fromJson(new FileReader(file1), Friends.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return true;
-                }
-
-                friends = friends1.List();
-                if(!friends.contains(player2)){
+            try {
+                ArrayList<String> friends = new ArrayList<>();
+                friends = jsonWorker2.readJSON();
+                if (!friends.contains(player2)) {
                     friends.add(player2);
                 } else {
-                    commandSender.sendMessage("This user already registered as a friend");
+                    commandSender.sendMessage(player2 + " already has friend " + player1);
                     return true;
                 }
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file1));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
-
-                    for (String friend : friends) {
-                        jw.value(friend);
-                    }
-
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                jsonWorker1.writeJSON(friends, "friends");
+            } catch (IOException e){
+                e.printStackTrace();
             }
-            if (!file2.exists()){
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file2));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
-                    jw.value(player1);
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                ArrayList<String> friends;
-                Friends friends2;
 
-                try {
-                    friends2 = gson.fromJson(new FileReader(file2), Friends.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return true;
-                }
-                friends = friends2.List();
-                if(!friends.contains(player1)){
-                    friends.add(player1);
-                } else {
-                    commandSender.sendMessage("This user already registered as a friend");
-                    return true;
-                }
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file2));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
-
-                    for (String friend : friends) {
-                        jw.value(friend);
-                    }
-
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             commandSender.sendMessage("Successfully added players in friends");
             return true;
 
@@ -236,88 +146,30 @@ public class Commands implements CommandExecutor, Runnable {
             String player1 = strings[2];
             String player2 = strings[3];
 
-            Gson gson = new Gson();
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
-            if(file1.exists()){
-                ArrayList<String> friends;
-                Friends friends1;
-                try {
-                    friends1 = gson.fromJson(new FileReader(file1), Friends.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return true;
-                }
-                friends = friends1.List();
-                if(friends.contains(player2)){
-                    friends.remove(player2);
-                } else {
-                    commandSender.sendMessage("This players are not friends");
-                    return true;
-                }
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file1));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
+            JsonWorker jsonWorker1 = new JsonWorker(file1);
+            JsonWorker jsonWorker2 = new JsonWorker(file2);
 
-                    for (String friend : friends) {
-                        jw.value(friend);
-                    }
-
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                ArrayList<String> friends = new ArrayList<>();
+                friends = jsonWorker1.readJSON();
+                friends.remove(player1);
+                jsonWorker1.writeJSON(friends, "friends");
+            } catch (IOException e){
+                e.printStackTrace();
             }
-            if(file2.exists()){
-                ArrayList<String> friends;
-                Friends friends1;
-                try {
-                    friends1 = gson.fromJson(new FileReader(file2), Friends.class);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    return true;
-                }
-                friends = friends1.List();
-                if(friends.contains(player1)){
-                    friends.remove(player1);
-                } else {
-                    commandSender.sendMessage("This players are not friends");
-                    return true;
-                }
-                JsonWriter jw;
-                try {
-                    jw = new JsonWriter(new FileWriter(file2));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                try {
-                    jw.beginObject();
-                    jw.name("friends");
-                    jw.beginArray();
 
-                    for (String friend : friends) {
-                        jw.value(friend);
-                    }
-
-                    jw.endArray();
-                    jw.endObject();
-                    jw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                ArrayList<String> friends = new ArrayList<>();
+                friends = jsonWorker2.readJSON();
+                friends.remove(player2);
+                jsonWorker1.writeJSON(friends, "friends");
+            } catch (IOException e){
+                e.printStackTrace();
             }
+
             commandSender.sendMessage("Successfully removed players from friends");
             return true;
         }
