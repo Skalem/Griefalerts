@@ -103,6 +103,14 @@ public class Commands implements CommandExecutor, Runnable {
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
+            try {
+                file1.createNewFile();
+                file2.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             JsonWorker jsonWorker1 = new JsonWorker(file1);
             JsonWorker jsonWorker2 = new JsonWorker(file2);
 
@@ -147,6 +155,11 @@ public class Commands implements CommandExecutor, Runnable {
 
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
+
+            if (!file1.exists() || !file2.exists()){
+                commandSender.sendMessage("These players are not friends. If you do think that they are, check " +
+                        "if these files exist" + file1.getAbsolutePath() + file2.getAbsolutePath());
+            }
 
             JsonWorker jsonWorker1 = new JsonWorker(file1);
             JsonWorker jsonWorker2 = new JsonWorker(file2);
