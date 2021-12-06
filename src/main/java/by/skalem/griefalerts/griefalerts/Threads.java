@@ -18,7 +18,8 @@ import static org.bukkit.Bukkit.getServer;
 public class Threads implements Runnable {
 
     Griefalerts plugin;
-    public Threads(Griefalerts plugin){
+
+    public Threads(Griefalerts plugin) {
         this.plugin = plugin;
     }
 
@@ -30,7 +31,7 @@ public class Threads implements Runnable {
     int code;
     String dim;
 
-    public void ThreadCreator(String player, int x, int y, int z,String block, int code, String dim){
+    public void ThreadCreator(String player, int x, int y, int z, String block, int code, String dim) {
 
         this.player = player;
         this.x = x;
@@ -54,14 +55,7 @@ public class Threads implements Runnable {
         String dim;
 
 
-        TextComponent msgo;
-        TextComponent msgb;
-        TextComponent msgl;
-        TextComponent msgblock;
-        TextComponent msgdoor;
-        TextComponent msggate;
-        TextComponent msgredstone;
-        TextComponent msgtrapdoor;
+        TextComponent msgo, msgb, msgl, msgblock, msgdoor, msggate, msgredstone, msgtrapdoor;
 
         Collection<? extends Player> players = getServer().getOnlinePlayers();
         Iterator<? extends Player> it = players.iterator();
@@ -76,7 +70,7 @@ public class Threads implements Runnable {
 
 
         String player2 = DataBase.Coordinates(x, y, z, dim);
-        if (player.equals(player2) || player2.contains("#")){
+        if (player.equals(player2) || player2.contains("#")) {
             return;
         }
 
@@ -94,7 +88,7 @@ public class Threads implements Runnable {
 
         ArrayList<String> muted = new ArrayList<>();
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
-        if(file.exists()) {
+        if (file.exists()) {
             Gson gson = new Gson();
             Muted m = null;
             try {
@@ -108,245 +102,87 @@ public class Threads implements Runnable {
         }
 
 
-        switch (code){
+        switch (code) {
             case 0:
                 TextComponent msg = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " сломал блок " + ChatColor.RED + block + ChatColor.GRAY + " игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-
-                if (players.size() != 0) {
-                    while (it.hasNext()){
-                        Player pl  = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                pl.sendMessage(msg);
-                            } else {
-                                pl.spigot().sendMessage(msg);
-                            }
-                        }
-                    }
-                }
+                sendMsgToAdmins(muted, msg);
                 break;
             case 1:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgo = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл контейнер игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgo.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgo);
-                            } else {
-                                msgo = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл контейнер игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgo.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgo);
-                            }
-                        }
-                    }
-                }
+                msgo = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл контейнер игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgo.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgo);
                 break;
             case 2:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgb = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на кнопку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgb.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgb);
-                            } else {
-                                msgb = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на кнопку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgb.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgb);
-                            }
-                        }
-                    }
-                }
+                msgb = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на кнопку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgb.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgb);
                 break;
             case 3:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgl = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на рычаг игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgl.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgl);
-                            } else {
-                                msgl = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на рычаг игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgl.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgl);
-                            }
-                        }
-                    }
-                }
+                msgl = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " нажал на рычаг игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgl.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgl);
                 break;
             case 4:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgblock = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " поставил блок " + ChatColor.RED + block + ChatColor.GRAY + " на блок игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgblock.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgblock);
-                            } else {
-                                msgblock = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " поставил блок " + ChatColor.RED + block + ChatColor.GRAY + " на блок игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgblock.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgblock);
-                            }
-                        }
-                    }
-                }
+                msgblock = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " поставил блок " + ChatColor.RED + block + ChatColor.GRAY + " на блок игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgblock.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgblock);
                 break;
-
             case 5:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    plugin.getLogger().info(s);
-                                    if (s != null) {
-                                        plugin.getLogger().info("Checking if " + s + " equals " + pl.getName());
-                                        if (s.equalsIgnoreCase(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл дверь игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgdoor);
-                            } else {
-                                plugin.getLogger().info("Sending message because array is null");
-                                msgdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл дверь игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgdoor);
-                            }
-                        }
-                    }
-                }
+                msgdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл дверь игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgdoor);
                 break;
-
             case 6:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msggate = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл калитку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msggate.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msggate);
-                            } else {
-                                msggate = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл калитку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msggate.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msggate);
-                            }
-                        }
-                    }
-                }
+                msggate = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл калитку игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msggate.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msggate);
                 break;
             case 7:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgredstone = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " изменил параметр блока игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgredstone.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgredstone);
-                            } else {
-                                msgredstone = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " изменил параметр блока игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgredstone.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgredstone);
-                            }
-                        }
-                    }
-                }
+                msgredstone = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " изменил параметр блока игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgredstone.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgredstone);
                 break;
             case 8:
-                if (players.size() != 0) {
-                    while (it.hasNext()) {
-                        Player pl = it.next();
-                        if (pl.hasPermission("Griefalerts.spam")) {
-                            if(muted != null) {
-                                for (String s : muted) {
-                                    if (s != null) {
-                                        if (s.equals(pl.getName())) {
-                                            return;
-                                        }
-                                    }
-                                }
-                                msgtrapdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл люк игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgtrapdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgtrapdoor);
-                            } else {
-                                msgtrapdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл люк игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
-                                msgtrapdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
-                                pl.spigot().sendMessage(msgtrapdoor);
-                            }
-                        }
-                    }
-                }
+                msgtrapdoor = new TextComponent(ChatColor.GRAY + "Игрок " + ChatColor.RED + player + ChatColor.GRAY + " открыл люк игрока " + ChatColor.RED + player2 + ChatColor.GRAY + " в " + dim + " на " + ChatColor.UNDERLINE + x + " " + y + " " + z);
+                msgtrapdoor.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + x + " " + y + " " + z));
+                sendMsgToAdmins(muted, msgtrapdoor);
                 break;
         }
     }
 
-    public void mute(String player){
+    public void sendMsgToAdmins(ArrayList<String> muted, TextComponent msg) {
+
+        Collection<? extends Player> players = getServer().getOnlinePlayers();
+        Iterator<? extends Player> it = players.iterator();
+
+        if (players.size() != 0) {
+            while (it.hasNext()) {
+                Player pl = it.next();
+                if (pl.hasPermission("Griefalerts.spam")) {
+                    if (muted != null) {
+                        for (String s : muted) {
+                            if (s != null) {
+                                if (s.equals(pl.getName())) {
+                                    return;
+                                }
+                            }
+                        }
+                        pl.sendMessage(msg);
+                    } else {
+                        pl.spigot().sendMessage(msg);
+                    }
+                }
+            }
+        }
+    }
+
+    public void mute(String player) {
         plugin.getLogger().info("Starting to mute");
 
         ArrayList<String> muted;
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -367,7 +203,7 @@ public class Threads implements Runnable {
         } else {
             try {
                 Gson gson = new Gson();
-                Muted m = gson.fromJson(new FileReader(file),Muted.class);
+                Muted m = gson.fromJson(new FileReader(file), Muted.class);
                 muted = m.List();
                 muted.add(player);
 
@@ -375,7 +211,7 @@ public class Threads implements Runnable {
                 jw.beginObject();
                 jw.name("muted");
                 jw.beginArray();
-                for (String s : muted){
+                for (String s : muted) {
                     jw.value(s);
                 }
                 jw.endArray();
@@ -389,17 +225,17 @@ public class Threads implements Runnable {
         }
     }
 
-    public void unmute(String player){
+    public void unmute(String player) {
         plugin.getLogger().info("Starting to unmute");
 
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
         ArrayList<String> muted;
 
-        if(!file.exists()) return;
+        if (!file.exists()) return;
 
         try {
             Gson gson = new Gson();
-            Muted m = gson.fromJson(new FileReader(file),Muted.class);
+            Muted m = gson.fromJson(new FileReader(file), Muted.class);
             muted = m.List();
             muted.remove(player);
 
@@ -407,7 +243,7 @@ public class Threads implements Runnable {
             jw.beginObject();
             jw.name("muted");
             jw.beginArray();
-            for (String s : muted){
+            for (String s : muted) {
                 jw.value(s);
             }
             jw.endArray();
