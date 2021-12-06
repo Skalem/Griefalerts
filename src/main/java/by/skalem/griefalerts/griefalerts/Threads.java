@@ -1,8 +1,5 @@
 package by.skalem.griefalerts.griefalerts;
 
-
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonWriter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -74,30 +71,21 @@ public class Threads implements Runnable {
             return;
         }
 
-        Gson g = new Gson();
         try {
-            FileReader r = new FileReader(plugin.getDataFolder() + File.separator + player2 + ".json");
-            if (new File(plugin.getDataFolder() + File.separator + player2 + ".json").exists()) {
-                Friends f = g.fromJson(r, Friends.class);
-                ArrayList<String> friends = f.List();
-                if (friends.contains(player)) return;
-            }
-        } catch (FileNotFoundException e) {
+            File file = new File(plugin.getDataFolder() + File.separator + player2 + ".json");
+            ArrayList<String> friends = new JsonWorker(file).readJSON();
+            if (friends.contains(player)) return;
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         ArrayList<String> muted = new ArrayList<>();
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
         if (file.exists()) {
-            Gson gson = new Gson();
-            Muted m = null;
             try {
-                m = gson.fromJson(new FileReader(file), Muted.class);
-            } catch (FileNotFoundException e) {
+                muted = new JsonWorker(file).readJSON();
+            } catch (IOException e) {
                 e.printStackTrace();
-            }
-            if (m != null) {
-                muted = m.List();
             }
         }
 
@@ -180,76 +168,45 @@ public class Threads implements Runnable {
     public void mute(String player) {
         plugin.getLogger().info("Starting to mute");
 
-        ArrayList<String> muted;
-        File file = new File(plugin.getDataFolder() + File.separator + "md.json");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                JsonWriter jw = new JsonWriter(new FileWriter(file));
-                jw.beginObject();
-                jw.name("muted");
-                jw.beginArray();
-                jw.value(player);
-                jw.endArray();
-                jw.endObject();
-                jw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                Gson gson = new Gson();
-                Muted m = gson.fromJson(new FileReader(file), Muted.class);
-                muted = m.List();
-                muted.add(player);
+        ArrayList<String> muted = new ArrayList<>(), oldMuted = new ArrayList<>();
 
-                JsonWriter jw = new JsonWriter(new FileWriter(file));
-                jw.beginObject();
-                jw.name("muted");
-                jw.beginArray();
-                for (String s : muted) {
-                    jw.value(s);
-                }
-                jw.endArray();
-                jw.endObject();
-                jw.close();
+        JsonWorker jsonWorker = new JsonWorker(new File(plugin.getDataFolder() + File.separator + "md.json"));
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            oldMuted = jsonWorker.readJSON();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        muted.add(player);
+        muted.addAll(oldMuted);
+
+        try {
+            jsonWorker.writeJSON(muted, "muted");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     public void unmute(String player) {
-        plugin.getLogger().info("Starting to unmute");
 
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
-        ArrayList<String> muted;
+        ArrayList<String> muted = new ArrayList<>();
+
+        JsonWorker jsonWorker = new JsonWorker(new File(plugin.getDataFolder() + File.separator + "md.json"));
 
         if (!file.exists()) return;
 
         try {
-            Gson gson = new Gson();
-            Muted m = gson.fromJson(new FileReader(file), Muted.class);
-            muted = m.List();
-            muted.remove(player);
+            muted = jsonWorker.readJSON();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            JsonWriter jw = new JsonWriter(new FileWriter(file));
-            jw.beginObject();
-            jw.name("muted");
-            jw.beginArray();
-            for (String s : muted) {
-                jw.value(s);
-            }
-            jw.endArray();
-            jw.endObject();
-            jw.close();
+        muted.remove(player);
 
+        try {
+            jsonWorker.writeJSON(muted, "muted");
         } catch (IOException e) {
             e.printStackTrace();
         }
