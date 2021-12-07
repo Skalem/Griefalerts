@@ -1,6 +1,5 @@
 package by.skalem.griefalerts.griefalerts;
 
-import com.sun.source.tree.IfTree;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.ChatColor;
@@ -82,17 +81,12 @@ public class Threads implements Runnable {
         ArrayList<String> muted = new ArrayList<>();
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
         try {
-            file.createNewFile();
+            JsonWorker jsonWorker = new JsonWorker(file);
+            jsonWorker.createNewJSONFile();
+            muted = jsonWorker.readJSON();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try {
-            muted = new JsonWorker(file).readJSON();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
 
         switch (code) {
             case 0 -> {
@@ -170,31 +164,24 @@ public class Threads implements Runnable {
     }
 
     public void mute(String player) {
-        plugin.getLogger().info("Starting to mute");
-
         ArrayList<String> muted = new ArrayList<>(), oldMuted = new ArrayList<>();
 
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
+        JsonWorker jsonWorker = new JsonWorker(file);
 
         try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        JsonWorker jsonWorker = new JsonWorker(new File(plugin.getDataFolder() + File.separator + "md.json"));
-
-        try {
+            jsonWorker.createNewJSONFile();
             oldMuted = jsonWorker.readJSON();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         muted.add(player);
-        muted.addAll(oldMuted);
-
+        if (oldMuted != null) {
+            muted.addAll(oldMuted);
+        }
         try {
-            jsonWorker.writeJSON(muted, "muted");
+            jsonWorker.writeJSON(muted);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -203,19 +190,13 @@ public class Threads implements Runnable {
     public void unmute(String player) {
 
         File file = new File(plugin.getDataFolder() + File.separator + "md.json");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         ArrayList<String> muted = new ArrayList<>();
 
         JsonWorker jsonWorker = new JsonWorker(file);
 
-        if (!file.exists()) return;
-
         try {
+            jsonWorker.createNewJSONFile();
             muted = jsonWorker.readJSON();
         } catch (IOException e) {
             e.printStackTrace();
@@ -224,7 +205,7 @@ public class Threads implements Runnable {
         muted.remove(player);
 
         try {
-            jsonWorker.writeJSON(muted, "muted");
+            jsonWorker.writeJSON(muted);
         } catch (IOException e) {
             e.printStackTrace();
         }

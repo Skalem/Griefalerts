@@ -43,32 +43,32 @@ public class Commands implements CommandExecutor, Runnable {
                 case "1":
                     this.time = 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 1 + " minute");
+                    commandSender.sendMessage("Stopped griefalerts for " + 1 + " minute");
                     return true;
                 case "2":
                     this.time = 2 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 2 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 2 + " minutes");
                     return true;
                 case "3":
                     this.time = 3 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 3 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 3 + " minutes");
                     return true;
                 case "4":
                     this.time = 4 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 4 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 4 + " minutes");
                     return true;
                 case "5":
                     this.time = 5 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 5 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 5 + " minutes");
                     return true;
                 case "6":
                     this.time = 6 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 6 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 6 + " minutes");
                     return true;
                 case "7":
                     this.time = 7 * 60 * 1000;
@@ -78,17 +78,17 @@ public class Commands implements CommandExecutor, Runnable {
                 case "8":
                     this.time = 8 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 8 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 8 + " minutes");
                     return true;
                 case "9":
                     this.time = 9 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 9 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 9 + " minutes");
                     return true;
                 case "10":
                     this.time = 10 * 60 * 1000;
                     thread.start();
-                    commandSender.sendMessage("Stopped griefalerts for" + 10 + " minutes");
+                    commandSender.sendMessage("Stopped griefalerts for " + 10 + " minutes");
                     return true;
             }
         }
@@ -103,41 +103,51 @@ public class Commands implements CommandExecutor, Runnable {
             File file1 = new File(plugin.getDataFolder() + File.separator + player1 +".json");
             File file2 = new File(plugin.getDataFolder() + File.separator + player2 +".json");
 
-            try {
-                file1.createNewFile();
-                file2.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
 
 
             JsonWorker jsonWorker1 = new JsonWorker(file1);
             JsonWorker jsonWorker2 = new JsonWorker(file2);
 
             try {
-                ArrayList<String> friends = new ArrayList<>();
+                jsonWorker1.createNewJSONFile();
+                jsonWorker2.createNewJSONFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                ArrayList<String> friends;
                 friends = jsonWorker1.readJSON();
-                 if (!friends.contains(player1)) {
-                     friends.add(player1);
-                 } else {
-                     commandSender.sendMessage(player1 + " already has friend " + player2);
-                     return true;
-                 }
-                jsonWorker1.writeJSON(friends, "friends");
+                if (friends == null) {
+                    friends = new ArrayList<>();
+                }
+                    if (!friends.contains(player2)) {
+                        friends.add(player2);
+                    } else {
+                        commandSender.sendMessage(player1 + " already has friend " + player2);
+                        return true;
+                    }
+
+                jsonWorker1.writeJSON(friends);
             } catch (IOException e){
                 e.printStackTrace();
             }
 
             try {
-                ArrayList<String> friends = new ArrayList<>();
+                ArrayList<String> friends;
                 friends = jsonWorker2.readJSON();
-                if (!friends.contains(player2)) {
-                    friends.add(player2);
+                if (friends == null) {
+                    friends = new ArrayList<>();
+                }
+                if (!friends.contains(player1)) {
+                    friends.add(player1);
                 } else {
                     commandSender.sendMessage(player2 + " already has friend " + player1);
                     return true;
                 }
-                jsonWorker1.writeJSON(friends, "friends");
+                jsonWorker2.writeJSON(friends);
             } catch (IOException e){
                 e.printStackTrace();
             }
@@ -165,19 +175,27 @@ public class Commands implements CommandExecutor, Runnable {
             JsonWorker jsonWorker2 = new JsonWorker(file2);
 
             try {
-                ArrayList<String> friends = new ArrayList<>();
+                ArrayList<String> friends;
                 friends = jsonWorker1.readJSON();
-                friends.remove(player1);
-                jsonWorker1.writeJSON(friends, "friends");
+                if (friends == null){
+                    commandSender.sendMessage("There are no friends to delete");
+                    return true;
+                }
+                friends.remove(player2);
+                jsonWorker1.writeJSON(friends);
             } catch (IOException e){
                 e.printStackTrace();
             }
 
             try {
-                ArrayList<String> friends = new ArrayList<>();
+                ArrayList<String> friends;
                 friends = jsonWorker2.readJSON();
-                friends.remove(player2);
-                jsonWorker1.writeJSON(friends, "friends");
+                if (friends == null){
+                    commandSender.sendMessage("There are no friends to delete");
+                    return true;
+                }
+                friends.remove(player1);
+                jsonWorker2.writeJSON(friends);
             } catch (IOException e){
                 e.printStackTrace();
             }
@@ -190,15 +208,12 @@ public class Commands implements CommandExecutor, Runnable {
 
     @Override
     public void run() {
-        plugin.getLogger().info("Starting new thread");
-        plugin.getLogger().info("Muting with nickname" + this.name);
         this.threads.mute(this.name);
         try {
             sleep(time);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        plugin.getLogger().info("Unmuting player" + this.name);
         this.threads.unmute(this.name);
     }
 }

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class Friends {
 
-    ArrayList<String> friends;
+    ArrayList<String> array;
 
     public ArrayList<String> List(){
-        return friends;
+        return array;
     }
 
 }

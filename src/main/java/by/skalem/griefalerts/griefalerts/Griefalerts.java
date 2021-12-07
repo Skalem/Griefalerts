@@ -35,7 +35,6 @@ public final class Griefalerts extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
         JsonWriter jw;
         try {
             jw = new JsonWriter(new FileWriter(getDataFolder() + File.separator + "md.json"));
