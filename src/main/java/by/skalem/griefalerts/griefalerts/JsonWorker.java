@@ -25,12 +25,12 @@ public class JsonWorker {
         return null;
     }
 
-    public void writeJSON(@NotNull ArrayList<String> list, String arrayName) throws IOException {
-        file.createNewFile();
+    public void writeJSON(@NotNull ArrayList<String> list) throws IOException {
+        createNewJSONFile();
 
         JsonWriter jw = new JsonWriter(new FileWriter(file));
         jw.beginObject();
-        jw.name("muted");
+        jw.name("array");
         jw.beginArray();
         for (String s : list) {
             jw.value(s);
@@ -38,6 +38,18 @@ public class JsonWorker {
         jw.endArray();
         jw.endObject();
         jw.close();
+    }
+
+    public void createNewJSONFile() throws IOException {
+        if(file.createNewFile() || file.length() == 0){
+            JsonWriter jw = new JsonWriter(new FileWriter(file));
+            jw.beginObject();
+            jw.name("array");
+            jw.beginArray();
+            jw.endArray();
+            jw.endObject();
+            jw.close();
+        }
     }
 }
 
