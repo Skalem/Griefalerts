@@ -6,7 +6,6 @@ package by.skalem.griefalerts.griefalerts;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -40,56 +39,70 @@ public class Commands implements CommandExecutor, Runnable {
             threads = new Threads(plugin);
             Thread thread = new Thread(this);
             switch (time) {
-                case "1":
+                default -> {
+                    commandSender.sendMessage("The time limits are between 1 to 10 minutes");
+                    return true;
+                }
+                case "1" -> {
                     this.time = 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 1 + " minute");
                     return true;
-                case "2":
+                }
+                case "2" -> {
                     this.time = 2 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 2 + " minutes");
                     return true;
-                case "3":
+                }
+                case "3" -> {
                     this.time = 3 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 3 + " minutes");
                     return true;
-                case "4":
+                }
+                case "4" -> {
                     this.time = 4 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 4 + " minutes");
                     return true;
-                case "5":
+                }
+                case "5" -> {
                     this.time = 5 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 5 + " minutes");
                     return true;
-                case "6":
+                }
+                case "6" -> {
                     this.time = 6 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 6 + " minutes");
                     return true;
-                case "7":
+                }
+                case "7" -> {
                     this.time = 7 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for" + 7 + " minutes");
                     return true;
-                case "8":
+                }
+                case "8" -> {
                     this.time = 8 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 8 + " minutes");
                     return true;
-                case "9":
+                }
+                case "9" -> {
                     this.time = 9 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 9 + " minutes");
                     return true;
-                case "10":
+                }
+                case "10" -> {
                     this.time = 10 * 60 * 1000;
                     thread.start();
                     commandSender.sendMessage("Stopped griefalerts for " + 10 + " minutes");
                     return true;
+                }
             }
         }
         else if (strings.length < 2) return false;

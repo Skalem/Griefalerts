@@ -6,7 +6,7 @@
 
     <groupId>by.skalem.griefalerts</groupId>
     <artifactId>Griefalerts</artifactId>
-    <version>4.0.10-beta</version>
+    <version>4.0.13-beta</version>
     <packaging>jar</packaging>
 
     <name>Griefalerts</name>
@@ -55,7 +55,7 @@
 
     <repositories>
         <repository>
-            <id>papermc-repo</id>
+            <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
