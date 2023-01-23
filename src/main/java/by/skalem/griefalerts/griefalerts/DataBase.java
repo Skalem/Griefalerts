@@ -37,19 +37,13 @@ public class DataBase {
         Statement stmt;
         ResultSet rs;
         String player = "#";
-        int dimcode = 0;
+        int dimcode = switch (dim) {
+            case "world" -> 1;
+            case "world_nether" -> 2;
+            case "world_the_end" -> 3;
+            default -> 0;
+        };
 
-        switch (dim) {
-            case "world":
-                dimcode = 1;
-                break;
-            case "world_nether":
-                dimcode = 2;
-                break;
-            case "world_the_end":
-                dimcode = 3;
-                break;
-        }
         // Сделать возможность выбора в каких измерениях будет работать  через config
         if (dimcode == 0) return "#";
 

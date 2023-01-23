@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>by.skalem.griefalerts</groupId>
-    <artifactId>Griefalerts</artifactId>
+    <artifactId>griefalerts</artifactId>
     <version>4.0.13-beta</version>
     <packaging>jar</packaging>
 
@@ -16,6 +16,14 @@
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>griefalerts</id>
+            <name>GitHub Skalem Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/Skalem/Griefalerts</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <plugins>
